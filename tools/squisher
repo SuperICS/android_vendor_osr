@@ -1,0 +1,179 @@
+#!/bin/bash
+#
+#  Copyright 2011 The SuperTeam Developer Group
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+# Squish a SuperOSR otapackage for distribution
+#
+
+SCRIPTDIR=`dirname $0`
+. $SCRIPTDIR/entorno.sh
+
+if [ "$TARGET_BUILD_VARIANT" = "userdebug" ]; then
+   TARGET_BUILD_VARIANT="eng"
+fi
+OTAPACKAGE=$OUT/$TARGET_PRODUCT-ota-$TARGET_BUILD_VARIANT.$LOGNAME.zip
+
+OPTICHARGER=$SCRIPTDIR/opticharger2
+QUIET=-q
+DELETE_BINS="applypatch applypatch_static check_prereq updater"
+squash_opts="-force-uid 1000 -force-gid 1000 -no-progress -noappend -no-exports -no-recovery"
+REPACK=$OUT/repack.d
+REPACKOTA=$REPACK/ota
+updater=$REPACKOTA/META-INF/com/google/android/updater-script
+
+# Verificación de entorno de desarrollo operativo
+if [ -z "$OUT" -o ! -d "$OUT" ]; then
+  msgErr "$0 solo funciona con un entorno completo de desarrollo. $OUT debe existir."
+  exit 1
+fi
+
+# Se verifica que existe el fichero inicial.
+if [ ! -f "$OTAPACKAGE" ]; then
+  msgErr "$OTAPACKAGE no existe!"
+  exit 1
+fi
+
+# Configuración del dispositivo
+# WANT_SQUASHFS: 1 indica que se creara una imagen SQUASHFS para el bin. 0 valor por defecto.
+# ALIAS: Nombre corto del dispositivo. Se recomienda no tocar este valor, se toma a partir del nombre del product.
+# KERNELMOD: 1 indica que el núcleo tiene módulos sin comprimir. 0 valor por defecto
+
+# Valores por defecto
+WANT_SQUASHFS=0
+KERNELMOD=0
+ALIAS=${TARGET_PRODUCT:5}
+
+#Valores específicos
+case "$ALIAS" in
+    ace)
+        KERNELMOD=1
+        ;;
+    anzu)
+        KERNELMOD=1
+        ;;
+    buzz)
+	    KERNELMOD=1
+        ;;
+    dream_sapphire) 
+        WANT_SQUASHFS=1
+        ;;
+esac
+
+# Si se requiere squashfs se verifica si existe el comando y su versión
+if [ "$WANT_SQUASHFS" -eq 1 ]; then
+  fatal=0
+  MKSQUASHFS_VER_REQ=4
+  if type mksquashfs >/dev/null 2>&1; then
+    if mksquashfs -version | grep -q "version $MKSQUASHFS_VER_REQ"; then :; else
+      msgErr "mksquashfs debe estar al menos en versión $MKSQUASHFS_VER_REQ para este build."
+      fatal=1
+    fi
+  else
+    msgErr "$TARGET_PRODUCT requiere mksquashfs."
+    fatal=1
+  fi
+
+  if [ "$fatal" -ne 0 ]; then
+    msgErr "Paquete sin optimizar está disponible en $OTAPACKAGE"
+    exit $fatal
+  fi
+fi
+
+# Elimina cualquier directorio de un trabajo antiguo
+clear
+msgInfo "Limpiando el entorno..."
+rm -rf $REPACK
+
+# Descomprime el otapackage y ejecuta opticharge en todos los apks
+mkdir -p $REPACKOTA && cd $_
+
+msgStatus "Desempaquetando $OTAPACKAGE..."
+unzip $QUIET $OTAPACKAGE
+cd $TOPDIR
+    
+#Ejecuta opticharger sobre las apks de la rom
+find $REPACKOTA/system/ -name \*.apk | xargs --max-args=1 --max-procs=${CORES} $OPTICHARGER
+
+
+if [ "$WANT_SQUASHFS" -eq 1 ]; then
+  # Recoloca su
+  cp -a $REPACKOTA/system/xbin $REPACK/_xbin/
+  rm -f $REPACK/_xbin/su $REPACKOTA/system/bin/su
+  mv $REPACKOTA/system/xbin/su $REPACKOTA/system/bin/su
+  chmod -R 555 $REPACK/_xbin/*
+
+  # Crea enlaces simbolicos para su y busybox (updater-script no puede funcionar con el sistema de ficheros squashfs).
+  ln -s ../bin/su $REPACK/_xbin/su
+  for link in `sed -n -e's/,//g' -e'/symlink(.*busybox/,/xbin.*);/p' $updater | tr '"' '\n' | sed -n -e'\,/system/xbin/,s,/system/xbin/,,p'`
+  do
+    ln -s busybox $REPACK/_xbin/$link
+  done
+
+  # Crea el squashfs con un nuevo y mejorado linkado simbolico!
+  mksquashfs $REPACK/_xbin/* $REPACK/_xbin.sqf $squash_opts
+  rm -r $REPACKOTA/system/xbin/*
+  mv $REPACK/_xbin.sqf $REPACKOTA/system/xbin/xbin.sqf
+  chmod 444 $REPACKOTA/system/xbin/xbin.sqf
+
+  # Borrado lo referente a xbin y corregido updater-script
+  sed -i -e's,system/xbin/su,system/bin/su,g' -e'/xbin/d' $updater
+fi
+
+# Corregir build.prop
+sed -i \
+  -e '/ro\.kernel\.android\.checkjni/d' \
+  -e '/ro\.build\.type/s/eng/user/' \
+  $REPACKOTA/system/build.prop
+
+# Eliminar binarios innecesarios
+cd $REPACKOTA/system/bin
+$ECHO $DELETE_BINS | xargs rm -f
+
+# Eliminar drivers inalambricos
+rm -rf $REPACKOTA/system/lib/modules/*/kernel/drivers/net
+
+# Strip modulos
+if [ "$KERNELMOD" -eq 1 ];  then
+    msgStatus "Comprimiendo módulos"
+    find $REPACKOTA/system/lib/modules -name "*.ko" -print0 | xargs -0 arm-eabi-strip --strip-unneeded
+fi
+
+# Determinar como se llamará el paquete firmado
+MODVERSION=$( grep -e '^ro\.osr\.version=' $REPACKOTA/system/build.prop | tail -1 | sed -n -e's/^.*SuperOSR-//p'  )
+: ${MODVERSION:=test}
+OUTFILE=$OUT/SuperOSR-$MODVERSION.zip
+
+cd $REPACKOTA
+
+if which 7za &>/dev/null
+then
+   msgStatus "Comprimiendo ROM usando 7za"
+   7za a -tzip -mx9 -mmt $REPACK/update.zip .
+else
+   msgStatus "Comprimiendo ROM usando zip"
+   zip $QUIET -r -9 $REPACK/update.zip . 
+fi
+
+cd $TOPDIR
+$SCRIPTDIR/firmar.sh $REPACK/update.zip $OUTFILE
+if [ "$?" -ne 0 ]; then
+    msgErr "Error al obtener el fichero firmado $OUTFILE"
+    exit 1
+fi
+
+msgStatus "Limpiando el entorno..."
+rm -rf $REPACK
+
+exit 0

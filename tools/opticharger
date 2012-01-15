@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+#  Copyright 2011 The SuperTeam Developer Group
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+# Author: adumont (Adlx)
+# We cache the optimized apk and save the md5 of the original apk
+# If we try to opticharge again the same apk (same md5) we use the same optimized apk from cache
+# Cache is held at $OUT/.opticharger
+
+SCRIPTDIR=`dirname $0`
+. $SCRIPTDIR/entorno.sh
+
+OPTICHARGER=$SCRIPTDIR/opticharger
+OPTICACHE=$OUT/.opticharger
+A=$1
+B=`basename $A`
+MD5FILE=`md5sum ${A} | awk '{ print $1 }'`
+
+[ -d ${OPTICACHE} ] || mkdir -p ${OPTICACHE}
+
+if [ -e "${A}" -a -e ${OPTICACHE}/${B}.md5 -a -e ${OPTICACHE}/${B}.opt ]
+then
+   if [ "$MD5FILE" = "$( cat ${OPTICACHE}/${B}.md5 )" ]
+   then
+      msgList "Optimizando" "$B (cache)"
+      cp ${OPTICACHE}/${B}.opt ${A}
+      exit 0
+   fi
+fi
+
+# guardamos el md5 del original en cache
+echo $MD5FILE > ${OPTICACHE}/${B}.md5
+
+# si acaso existe el ${OPTICACHE}/${B}, lo borramos
+[ -e ${OPTICACHE}/${B}.opt ] && rm ${OPTICACHE}/${B}.opt
+
+$OPTICHARGER $A
+
+cp ${A} ${OPTICACHE}/${B}.opt

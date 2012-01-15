@@ -1,0 +1,1 @@
+$(call inherit-product, $(LOCAL_PATH)/base.mk)
