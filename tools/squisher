@@ -1,37 +1,28 @@
 #!/bin/bash
 #
-#  Copyright 2011 The SuperTeam Developer Group
-#
-#  Licensed under the Apache License, Version 2.0 (the "License");
-#  you may not use this file except in compliance with the License.
-#  You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-#  Unless required by applicable law or agreed to in writing, software
-#  distributed under the License is distributed on an "AS IS" BASIS,
-#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#  See the License for the specific language governing permissions and
-#  limitations under the License.
-#
-# Squish a SuperOSR otapackage for distribution
+# Squish a otapackage for distribution
+# Superatmel y Blerfont (Base Cyanogen)
 #
 
-SCRIPTDIR=`dirname $0`
-. $SCRIPTDIR/entorno.sh
-
-if [ "$TARGET_BUILD_VARIANT" = "userdebug" ]; then
-   TARGET_BUILD_VARIANT="eng"
-fi
+OUT_TARGET_HOST=linux-x86
+export VENDOR=vendor/osr
+MODS=$VENDOR/mods
 OTAPACKAGE=$OUT/$TARGET_PRODUCT-ota-$TARGET_BUILD_VARIANT.$LOGNAME.zip
 
-OPTICHARGER=$SCRIPTDIR/opticharger2
+OPTICHARGER=$ANDROID_BUILD_TOP/$VENDOR/tools/opticharger2
+OPTICHARGER_FRAMEWORK=$ANDROID_BUILD_TOP/$VENDOR/tools/opticharger_framework
 QUIET=-q
-DELETE_BINS="applypatch applypatch_static check_prereq updater"
+DELETE_BINS="applypatch applypatch_static check_prereq recovery updater"
 squash_opts="-force-uid 1000 -force-gid 1000 -no-progress -noappend -no-exports -no-recovery"
 REPACK=$OUT/repack.d
 REPACKOTA=$REPACK/ota
 updater=$REPACKOTA/META-INF/com/google/android/updater-script
+
+CORES=$( cat /proc/cpuinfo | grep -c processor )
+
+CHANGE_FRAMEWORK=1
+
+. mensajes.sh
 
 # Verificación de entorno de desarrollo operativo
 if [ -z "$OUT" -o ! -d "$OUT" ]; then
@@ -46,30 +37,57 @@ if [ ! -f "$OTAPACKAGE" ]; then
 fi
 
 # Configuración del dispositivo
+# LOWDISK: 1 indica que algunas aplicaciones se pasan del framework al directorio data. 0 valor por defecto.
+# GALLERY: 2D indica que la aplicación de la galería de fotos, será la versión 2D por defecto. 3D valor por defecto.
+# DPI: mdpi indica que el dispositivo usa resolución media. hdpi valor por defecto.
+# ANIM: 1 indica que no se modifica las animaciones del dispositivo. 0 valor por defecto.
 # WANT_SQUASHFS: 1 indica que se creara una imagen SQUASHFS para el bin. 0 valor por defecto.
 # ALIAS: Nombre corto del dispositivo. Se recomienda no tocar este valor, se toma a partir del nombre del product.
 # KERNELMOD: 1 indica que el núcleo tiene módulos sin comprimir. 0 valor por defecto
 
 # Valores por defecto
 WANT_SQUASHFS=0
+DPI=hdpi
+#EXTRAS2=0
+EXTRATAB=0
+LOWDISK=0
+GALLERY=3D
+ANIM=0
 KERNELMOD=0
+WALL_LOW=0
+APP_GOOGLE=0
+SETUP=1
 ALIAS=${TARGET_PRODUCT:5}
 
 #Valores específicos
 case "$ALIAS" in
     ace)
         KERNELMOD=1
+	APP_GOOGLE=1
+	SETUP=0
         ;;
     anzu)
         KERNELMOD=1
+	APP_GOOGLE=1
+	SETUP=0
         ;;
-    buzz)
-	    KERNELMOD=1
-        ;;
-    dream_sapphire) 
-        WANT_SQUASHFS=1
-        ;;
+    maguro) 
+	APP_GOOGLE=1
+	;;
 esac
+
+MOD_DPI=$ANDROID_BUILD_TOP/$VENDOR/mods/$DPI
+
+# Control de Gallery 2D
+if [ "$GALLERY" = 2D ]; then
+	if [ ! -f $OUT/system/app/Gallery.apk ]
+	then
+	  msgErr "Gallery.apk no esta compilado, ejecuta make Gallery y make otapackage"
+	  exit 1
+	else
+	  msgOK "Control de Gallery.apk correcto"
+	fi
+fi
 
 # Si se requiere squashfs se verifica si existe el comando y su versión
 if [ "$WANT_SQUASHFS" -eq 1 ]; then
@@ -95,17 +113,106 @@ fi
 clear
 msgInfo "Limpiando el entorno..."
 rm -rf $REPACK
+mkdir -p $REPACK
 
 # Descomprime el otapackage y ejecuta opticharge en todos los apks
-mkdir -p $REPACKOTA && cd $_
+mkdir $REPACKOTA
 
-msgStatus "Desempaquetando $OTAPACKAGE..."
-unzip $QUIET $OTAPACKAGE
-cd $TOPDIR
-    
-#Ejecuta opticharger sobre las apks de la rom
-find $REPACKOTA/system/ -name \*.apk | xargs --max-args=1 --max-procs=${CORES} $OPTICHARGER
+    cd $REPACKOTA
+    msgStatus "Desempaquetando $OTAPACKAGE..."
+    unzip $QUIET $OTAPACKAGE
+  
+# Copiado de archivos comunes
+    cp -rf $ANDROID_BUILD_TOP/$MODS/common/* $REPACKOTA/
 
+# Copiado de archivos base mdpi o hdpi
+    cp -rf $MOD_DPI/* $REPACKOTA/
+
+# Copiado de aplicaciones extras de Google a data/app
+
+    if [ "$APP_GOOGLE" -eq 1 ]; then
+       msgOK "Con Aplicaciones de Google extras y FlashPlayer en data/app"
+       msgWarn "FlashPlayer"
+       msgWarn "Google Docs"
+       msgWarn "Google Plus"
+    cp -rf $ANDROID_BUILD_TOP/$MODS/appgoogle/* $REPACKOTA/
+	else
+       msgOK "Sin Aplicaciones de Google extras y FlashPlayer en data/app"
+    fi
+
+if [ $CHANGE_FRAMEWORK -eq 1 ]
+then
+# Extraemos el framework para modificarlo
+    mkdir $REPACKOTA/system/framework/opticharge
+    cd $REPACKOTA/system/framework/opticharge
+    msgStatus "Desempaquetando framework-res..."
+    unzip -q ../framework-res.apk
+    cp -rf $ANDROID_BUILD_TOP/$MODS/frame_$DPI/* res/drawable-$DPI/
+    cp -rf $ANDROID_BUILD_TOP/$MODS/frame_nodpi/* res/drawable-$DPI/
+    cp -rf $ANDROID_BUILD_TOP/$MODS/wallpaper_$DPI/* res/drawable/
+    cp -rf $ANDROID_BUILD_TOP/$MODS/wallpaper_$DPI/* res/drawable-$DPI/
+  
+    if [ "$WALL_LOW" -eq 1 ]; then
+       msgOK "Con Wallpaper mas pequeño"
+    cp -rf $ANDROID_BUILD_TOP/$MODS/wallpaper-low/* res/drawable/
+    cp -rf $ANDROID_BUILD_TOP/$MODS/wallpaper-low/* res/drawable-$DPI/
+
+    fi
+
+    if [ "$ANIM" -eq 0 ]; then
+       msgOK "Con animaciones especiales"
+       cp -rf $ANDROID_BUILD_TOP/$MODS/frame_anim/* res/anim/
+    fi
+
+# Comprimimos sin optimizar pues lo haremos luego 
+    msgStatus "Comprimiendo framework..."
+    zip -rq framework-res.apk *
+    mv -f framework-res.apk ../framework-res.apk
+    cd ..
+    rm -rf opticharge
+else
+    msgStatus "No se haran cambios del framework-res"
+fi
+  
+# Copiado de archivos especificos del dispositivo
+    cp -r $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/* $REPACKOTA/
+  
+# Para los que necesitan espacio
+    if [ "$LOWDISK" -eq 1 ]; then
+        msgInfo "Dispositivo con espacio al límite"
+        msgStatus "Pasando archivos de system a data para conseguir espacio"
+        mv  $REPACKOTA/system/app/Gmail.apk $REPACKOTA/data/app/com.google.android.gm-1.apk
+        mv  $REPACKOTA/system/app/Maps.apk $REPACKOTA/data/app/com.android.apps.maps-1.apk
+        mv  $REPACKOTA/system/app/VoiceSearch.apk $REPACKOTA/data/app/com.google.android.voiceSearch-1.apk
+        mv  $REPACKOTA/system/app/Street.apk $REPACKOTA/data/app/com.google.android.street-1.apk
+        mv  $REPACKOTA/system/app/YouTube.apk $REPACKOTA/data/app/com.google.android.youtube-1.apk
+    fi
+  
+# Renombrado Gallery dependiendo del dispositivo que sea
+    msgOK "Activado Gallery $GALLERY"
+    if [ "$GALLERY" = 2D ]; then
+        mv $REPACKOTA/system/app/Gallery3D.apk $REPACKOTA/system/app/Gallery3D.app
+        cp $OUT/system/app/Gallery.apk $REPACKOTA/system/app/Gallery.apk
+    fi
+  
+    cd $REPACKOTA/system/framework
+  
+# Ejecuta si existe personalizaciones específicas del dispositivo.
+    if [ -f $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh ]; then
+    	$ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh $REPACKOTA
+    	rm $REPACKOTA/personalizar.sh
+    fi
+    		
+# Ejecuta opticharger especial sobre el framework para copiar las imagenes modificadas de la rom dentro de él
+    $OPTICHARGER framework-res.apk
+
+#Ejecuta opticharger sobre el resto de apks de la rom
+  cd $REPACKOTA/system/app
+  find ./ -name \*.apk | xargs --max-args=1 --max-procs=${CORES} $OPTICHARGER
+
+
+mv $REPACKOTA/system/app/Stk.apk $REPACKOTA/system/app/Stk.app
+mv $REPACKOTA/system/app/Development.apk $REPACKOTA/system/app/Development.app
 
 if [ "$WANT_SQUASHFS" -eq 1 ]; then
   # Recoloca su
@@ -137,12 +244,24 @@ sed -i \
   -e '/ro\.build\.type/s/eng/user/' \
   $REPACKOTA/system/build.prop
 
+# Decidimos si queremos SetupWizard al inicio o no
+if [ "$SETUP" -eq 0 ]; then
+sed -i 's/ro.setupwizard.mode=OPTIONAL/ro.setupwizard.mode=DISABLED/g' $REPACKOTA/system/build.prop
+fi
+
 # Eliminar binarios innecesarios
 cd $REPACKOTA/system/bin
 $ECHO $DELETE_BINS | xargs rm -f
 
 # Eliminar drivers inalambricos
 rm -rf $REPACKOTA/system/lib/modules/*/kernel/drivers/net
+
+# Se eliminan apks conflictivas con gapps
+rm -rf $REPACKOTA/system/app/Provision.apk
+rm -rf $REPACKOTA/system/app/QuickSearchBox.apk
+
+# No se necesita recovery (en caso de existir)
+rm -rf $REPACKOTA/recovery
 
 # Strip modulos
 if [ "$KERNELMOD" -eq 1 ];  then
@@ -151,7 +270,7 @@ if [ "$KERNELMOD" -eq 1 ];  then
 fi
 
 # Determinar como se llamará el paquete firmado
-MODVERSION=$( grep -e '^ro\.osr\.version=' $REPACKOTA/system/build.prop | tail -1 | sed -n -e's/^.*SuperOSR-//p'  )
+MODVERSION=$( grep -e '^ro\.modversion=' $REPACKOTA/system/build.prop | tail -1 | sed -n -e's/^.*SuperOSR-//p'  )
 : ${MODVERSION:=test}
 OUTFILE=$OUT/SuperOSR-$MODVERSION.zip
 
@@ -166,14 +285,23 @@ else
    zip $QUIET -r -9 $REPACK/update.zip . 
 fi
 
-cd $TOPDIR
-$SCRIPTDIR/firmar.sh $REPACK/update.zip $OUTFILE
+firmar.sh $REPACK/update.zip $OUTFILE
 if [ "$?" -ne 0 ]; then
     msgErr "Error al obtener el fichero firmado $OUTFILE"
     exit 1
 fi
 
-msgStatus "Limpiando el entorno..."
+if [ "$EXTRATAB" -eq 1 ]; then
+    msgStatus "Preparación de los archivos rfs"
+    #cp $MOD_DPI/system/media/bootanimation.zip $REPACK/ota/system/media
+    cp -r $REPACK/ota/system/* $OUT/system
+    rm -f $OUT/system/etc/super/04superteam
+    rm -f $OUT/system/app/Torch.apk
+    rm -f $OUT/system/app/LatinIME.apk
+    msgStatus "Limpiando el entorno de Galaxy Tab..."
+else
+    msgStatus "Limpiando el entorno..."
+fi;
 rm -rf $REPACK
 
 exit 0

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (C) 2011 The SuperTeam Development Group.
+# Copyright (C) 2011 SuperTeam.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@
 # Firma ficheros para instalar en el dispositivo. 
 #
 
-SCRIPTDIR=`dirname $0`
-. $SCRIPTDIR/entorno.sh
+. mensajes.sh
+
+OUT_TARGET_HOST=linux-x86
+SECURITYDIR=$ANDROID_BUILD_TOP/build/target/product/security
 
 msgStatus "Firmando el fichero $1"
 	

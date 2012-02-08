@@ -1,0 +1,12 @@
+#! /system/bin/sh
+#
+echo "Preparacion para borrar logs"; 
+sleep 240;
+echo " "; 
+echo "Borrado de logs"; 
+busybox rm -f /sdcard/c*.log /sdcard/b*.log
+busybox rm -f /sdcard/External_SD/c*.log /sdcard/External_SD/b*.log
+rwsystem
+busybox rm -f /system/bin/clearlog;
+rosystem
+exit
