@@ -53,7 +53,6 @@ PRODUCT_PACKAGES += \
     MusicVisualization \
     Development \
     LatinIME \
-    ROMControl \
     SpareParts \
     Superuser \
     Superuser.apk \
