@@ -10,7 +10,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.android.wifi-watchlist=GoogleGuest \
     ro.setupwizard.enterprise_mode=1 \
     ro.com.android.dateformat=MM-dd-yyyy \
-    ro.com.android.dataroaming=false
+    ro.com.android.dataroaming=false \
+    ro.sup.superteam \
+    ro.stats.devname=SuperTe@m \
+    ro.stats.romname=SuperOSR
 
 # init.d support
 PRODUCT_COPY_FILES += \
@@ -27,17 +30,30 @@ PRODUCT_COPY_FILES +=  \
     vendor/osr/proprietary/Term.apk:system/app/Term.apk \
     vendor/osr/proprietary/lib/armeabi/libjackpal-androidterm3.so:system/lib/libjackpal-androidterm3.so \
     vendor/osr/prebuilt/common/bootanimation.zip:system/media/bootanimation.zip
-  	
+
+# Bring in camera effects & videos
+$(call inherit-product, frameworks/base/data/videos/VideoPackage2.mk)
+PRODUCT_COPY_FILES +=  \
+    vendor/osr/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
+    vendor/osr/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd \
+    vendor/osr/prebuilt/common/app/LatinImeDictionaryPack.apk:system/app/LatinImeDictionaryPack.apk \
 
 # Enable SIP+VoIP on all targets
 PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
 
+# Don't export PS1 in /system/etc/mkshrc.
+PRODUCT_COPY_FILES += \
+    vendor/osr/prebuilt/common/etc/mkshrc:system/etc/mkshrc
+
 # Required OSR packages
 PRODUCT_PACKAGES += \
     Camera \
+    MusicFX \
+    MusicVisualization \
     Development \
     LatinIME \
+    ROMControl \
     SpareParts \
     Superuser \
     Superuser.apk \
@@ -64,8 +80,19 @@ PRODUCT_PACKAGES += \
     audio_effects.conf
 #    Trebuchet \
 
-DEVICE_PACKAGE_OVERLAYS += \
-	vendor/osr/overlay
+# Adding files needed for extra camera features
+PRODUCT_COPY_FILES += \
+    vendor/osr/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
+    vendor/osr/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd \
+    vendor/osr/prebuilt/common/media/video/AndroidInSpace.240p.mp4:system/media/video/AndroidInSpace.240p.mp4 \
+    vendor/osr/prebuilt/common/media/video/AndroidInSpace.480p.mp4:system/media/video/AndroidInSpace.480p.mp4 \
+    vendor/osr/prebuilt/common/media/video/Disco.240p.mp4:system/media/video/Disco.240p.mp4 \
+    vendor/osr/prebuilt/common/media/video/Disco.480p.mp4:system/media/video/Disco.480p.mp4 \
+    vendor/osr/prebuilt/common/media/video/Sunset.240p.mp4:system/media/video/Sunset.240p.mp4 \
+    vendor/osr/prebuilt/common/media/video/Sunset.480p.mp4:system/media/video/Sunset.480p.mp4 
+
+#PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/dictionaries
+PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
 
 PRODUCT_VERSION_DEVICE_SPECIFIC = SuperOSR
 PRODUCT_VERSION_MAJOR = 1
