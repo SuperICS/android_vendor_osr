@@ -35,8 +35,9 @@ PRODUCT_COPY_FILES +=  \
 $(call inherit-product, frameworks/base/data/videos/VideoPackage2.mk)
 PRODUCT_COPY_FILES +=  \
     vendor/osr/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
-    vendor/osr/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd \
-    vendor/osr/prebuilt/common/app/LatinImeDictionaryPack.apk:system/app/LatinImeDictionaryPack.apk \
+    vendor/osr/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd
+
+#    vendor/osr/prebuilt/common/app/LatinImeDictionaryPack.apk:system/app/LatinImeDictionaryPack.apk \
 
 # Enable SIP+VoIP on all targets
 PRODUCT_COPY_FILES += \
@@ -90,7 +91,7 @@ PRODUCT_COPY_FILES += \
     vendor/osr/prebuilt/common/media/video/Sunset.240p.mp4:system/media/video/Sunset.240p.mp4 \
     vendor/osr/prebuilt/common/media/video/Sunset.480p.mp4:system/media/video/Sunset.480p.mp4 
 
-#PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/dictionaries
+PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/dictionaries
 PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
 
 PRODUCT_VERSION_DEVICE_SPECIFIC = SuperOSR
