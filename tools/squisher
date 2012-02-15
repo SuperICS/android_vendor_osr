@@ -62,7 +62,6 @@ ALIAS=${TARGET_PRODUCT:5}
 #Valores específicos
 case "$ALIAS" in
     ace)
-	APP_GOOGLE=1
         KERNELMOD=1
 	SETUP=0
         ;;
@@ -150,7 +149,7 @@ then
 #    cp -rf $ANDROID_BUILD_TOP/$MODS/frame_$DPI/* res/drawable-$DPI/
 #    cp -rf $ANDROID_BUILD_TOP/$MODS/frame_nodpi/* res/drawable-$DPI/
 #    cp -rf $ANDROID_BUILD_TOP/$MODS/wallpaper_$DPI/* res/drawable/
- #   cp -rf $ANDROID_BUILD_TOP/$MODS/wallpaper_$DPI/* res/drawable-$DPI/
+#   cp -rf $ANDROID_BUILD_TOP/$MODS/wallpaper_$DPI/* res/drawable-$DPI/
   
     if [ "$WALL_LOW" -eq 1 ]; then
        msgOK "Con Wallpaper mas pequeño"
@@ -245,7 +244,10 @@ fi
 sed -i \
   -e '/ro\.kernel\.android\.checkjni/d' \
   -e '/ro\.build\.type/s/eng/user/' \
+  -e '/ro\.build\.date\.utc/s/.*/ro.build.date.utc=0/' \
   $REPACKOTA/system/build.prop
+
+#sed -i 's/ro.build.date.utc=.*/ro.build.date.utc=0/g'
 
 # Decidimos si queremos SetupWizard al inicio o no
 if [ "$SETUP" -eq 0 ]; then
