@@ -11,7 +11,8 @@ PRODUCT_PACKAGES := $(PRODUCT_PACKAGES) \
     OpenWnn \
     PinyinIME \
     libWnnJpnDic \
-    libwnndict
+    libwnndict \
+    libjni_pinyinime
 
 PRODUCT_NOLATIN_IME := true
 PRODUCT_SUBDEVICE := $(PRODUCT_DEVICE)_cn
