@@ -194,12 +194,16 @@ fi
   
     cd $REPACKOTA/system/framework
   
+
+# Copiado de archivos especificos del dispositivo
+    cp -r $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/* $REPACKOTA/
+
 # Ejecuta si existe personalizaciones específicas del dispositivo.
     if [ -f $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh ]; then
     	$ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh $REPACKOTA
     	rm $REPACKOTA/personalizar.sh
     fi
-    		
+
 # Ejecuta opticharger especial sobre el framework para copiar las imagenes modificadas de la rom dentro de él
     $OPTICHARGER framework-res.apk
 
@@ -207,8 +211,8 @@ fi
   cd $REPACKOTA/system/app
   find ./ -name \*.apk | xargs --max-args=1 --max-procs=${CORES} $OPTICHARGER
 
-# Copiado de archivos especificos del dispositivo
-    cp -r $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/* $REPACKOTA/
+#Si pasa el Opticharger por el LatinIME mata los diccionarios
+   cp $OUT/system/app/LatinIME.apk $REPACKOTA/system/app/LatinIME.apk
 
 #mv $REPACKOTA/system/app/Stk.apk $REPACKOTA/system/app/Stk.app
 mv $REPACKOTA/system/app/Development.apk $REPACKOTA/system/app/Development.app
