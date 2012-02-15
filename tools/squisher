@@ -56,21 +56,18 @@ ANIM=0
 KERNELMOD=0
 WALL_LOW=0
 APP_GOOGLE=0
-GOOGLE=0
-GOOGLEFACE=0
 SETUP=1
 ALIAS=${TARGET_PRODUCT:5}
 
 #Valores específicos
 case "$ALIAS" in
     ace)
-        KERNELMOD=1
 	APP_GOOGLE=1
+        KERNELMOD=1
 	SETUP=0
         ;;
     anzu)
         KERNELMOD=1
-	APP_GOOGLE=1
 	SETUP=0
         ;;
     maguro) 
@@ -133,24 +130,6 @@ mkdir $REPACKOTA
 
 # Copiado de aplicaciones extras de Google a data/app
 
-    if [ "$GOOGLE" -eq 1 ]; then
-       msgOK "Con Gapps de Google ICS"
-    cp -rf $ANDROID_BUILD_TOP/$VENDOR/googleics/* $REPACKOTA/system/
-	else
-       msgOK "Sin Aplicaciones de Google ics"
-    fi
-
-# Copiado de aplicaciones extras de Google a data/app
-
-    if [ "$GOOGLEFACE" -eq 1 ]; then
-       msgOK "Con Facelock ICS"
-    cp -rf $ANDROID_BUILD_TOP/$VENDOR/googleicsfacelock/* $REPACKOTA/system/
-	else
-       msgOK "Sin Facelock"
-    fi
-
-# Copiado de aplicaciones extras de Google a data/app
-
     if [ "$APP_GOOGLE" -eq 1 ]; then
        msgOK "Con Aplicaciones de Google extras y FlashPlayer en data/app"
        msgWarn "FlashPlayer"
@@ -195,9 +174,6 @@ else
     msgStatus "No se haran cambios del framework-res"
 fi
   
-# Copiado de archivos especificos del dispositivo
-    cp -r $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/* $REPACKOTA/
-  
 # Para los que necesitan espacio
     if [ "$LOWDISK" -eq 1 ]; then
         msgInfo "Dispositivo con espacio al límite"
@@ -231,6 +207,8 @@ fi
   cd $REPACKOTA/system/app
   find ./ -name \*.apk | xargs --max-args=1 --max-procs=${CORES} $OPTICHARGER
 
+# Copiado de archivos especificos del dispositivo
+    cp -r $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/* $REPACKOTA/
 
 #mv $REPACKOTA/system/app/Stk.apk $REPACKOTA/system/app/Stk.app
 mv $REPACKOTA/system/app/Development.apk $REPACKOTA/system/app/Development.app
