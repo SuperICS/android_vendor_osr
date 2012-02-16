@@ -50,6 +50,7 @@ PRODUCT_COPY_FILES += \
 # Required OSR packages
 PRODUCT_PACKAGES += \
     Camera \
+    FileExplorer \
     MusicFX \
     MusicVisualization \
     Development \
