@@ -72,6 +72,7 @@ PRODUCT_PACKAGES += \
     LiveWallpapers \
     LiveWallpapersPicker \
     VisualizationWallpapers \
+    Wallpapers \
     PhaseBeam
 
 # Custom OSR packages
