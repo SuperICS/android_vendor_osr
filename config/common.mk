@@ -50,11 +50,13 @@ PRODUCT_COPY_FILES += \
 # Required OSR packages
 PRODUCT_PACKAGES += \
     Camera \
+    Development \
     FileExplorer \
     MusicFX \
     MusicVisualization \
-    Development \
+    Notes \
     LatinIME \
+    SoundRecorder2 \
     SpareParts \
     Superuser \
     Superuser.apk \
