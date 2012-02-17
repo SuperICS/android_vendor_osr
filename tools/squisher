@@ -73,6 +73,10 @@ case "$ALIAS" in
 	GOOGLE=0
 	GOOGLEFACE=0
 	;;
+    pyramid) 
+	APP_GOOGLE=1
+	GOOGLEFACE=0
+	;;
 esac
 
 MOD_DPI=$ANDROID_BUILD_TOP/$VENDOR/mods/$DPI
