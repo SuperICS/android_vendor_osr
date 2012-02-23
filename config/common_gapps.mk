@@ -25,7 +25,6 @@ PRODUCT_COPY_FILES += \
     vendor/osr/proprietary/common/app/OneTimeInitializer.apk:system/app/OneTimeInitializer.apk \
     vendor/osr/proprietary/common/app/Phonesky.apk:system/app/Phonesky.apk \
     vendor/osr/proprietary/common/app/PlusOne.apk:system/app/PlusOne.apk \
-    vendor/osr/proprietary/common/app/QuickSearchBox.apk:system/app/QuickSearchBox.apk \
     vendor/osr/proprietary/common/app/SetupWizard.apk:system/app/SetupWizard.apk \
     vendor/osr/proprietary/common/app/Street.apk:system/app/Street.apk \
     vendor/osr/proprietary/common/app/Superuser.apk:system/app/Superuser.apk \
