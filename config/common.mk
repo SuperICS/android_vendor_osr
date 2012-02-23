@@ -56,7 +56,6 @@ PRODUCT_PACKAGES += \
     MusicVisualization \
     Notes \
     LatinIME \
-    ROMControl \
     SoundRecorder2 \
     SpareParts \
     Superuser \
