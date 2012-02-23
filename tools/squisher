@@ -69,6 +69,9 @@ case "$ALIAS" in
         KERNELMOD=1
 	SETUP=0
         ;;
+    galaxysmtd) 
+	GOOGLE=0
+	GOOGLEFACE=0
     maguro) 
 	GOOGLE=0
 	GOOGLEFACE=0
@@ -267,7 +270,7 @@ rm -rf $REPACKOTA/system/lib/modules/*/kernel/drivers/net
 
 # Se eliminan apks conflictivas con gapps
 rm -rf $REPACKOTA/system/app/Provision.apk
-rm -rf $REPACKOTA/system/app/QuickSearchBox.apk
+#rm -rf $REPACKOTA/system/app/QuickSearchBox.apk
 
 # No se necesita recovery (en caso de existir)
 rm -rf $REPACKOTA/recovery
