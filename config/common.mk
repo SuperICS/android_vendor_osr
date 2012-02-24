@@ -71,6 +71,7 @@ PRODUCT_PACKAGES += \
     MagicSmokeWallpapers \
     NoiseField \
     Galaxy4 \
+    Launcher2 \
     LiveWallpapers \
     LiveWallpapersPicker \
     VisualizationWallpapers \
