@@ -83,18 +83,6 @@ PRODUCT_PACKAGES += \
     DSPManager \
     libcyanogen-dsp \
     audio_effects.conf
-#    Trebuchet \
-
-# Adding files needed for extra camera features
-PRODUCT_COPY_FILES += \
-    vendor/osr/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
-    vendor/osr/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd \
-    vendor/osr/prebuilt/common/media/video/AndroidInSpace.240p.mp4:system/media/video/AndroidInSpace.240p.mp4 \
-    vendor/osr/prebuilt/common/media/video/AndroidInSpace.480p.mp4:system/media/video/AndroidInSpace.480p.mp4 \
-    vendor/osr/prebuilt/common/media/video/Disco.240p.mp4:system/media/video/Disco.240p.mp4 \
-    vendor/osr/prebuilt/common/media/video/Disco.480p.mp4:system/media/video/Disco.480p.mp4 \
-    vendor/osr/prebuilt/common/media/video/Sunset.240p.mp4:system/media/video/Sunset.240p.mp4 \
-    vendor/osr/prebuilt/common/media/video/Sunset.480p.mp4:system/media/video/Sunset.480p.mp4 
 
 PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/dictionaries
 PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
