@@ -1,4 +1,6 @@
 # NFC
+BOARD_HAVE_NFC := true
+
 PRODUCT_PACKAGES += \
         libnfc \
         libnfc_jni \
