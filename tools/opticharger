@@ -7,7 +7,7 @@
 # /home/shade/dev/sources/android-cm-eclair/out/target/product/dream_sapphire/obj/PACKAGING/target_files_intermediates/cyanogen_dream_sapphire-target_files-eng.shade/META/apkcerts.txt
 #
 
-. mensajes.sh
+. entorno.sh
 
 OUT_TARGET_HOST=$(uname -a | grep Darwin)
 if [ -z "$OUT_TARGET_HOST" ]

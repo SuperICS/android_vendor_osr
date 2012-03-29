@@ -18,7 +18,7 @@
 # Firma ficheros para instalar en el dispositivo. 
 #
 
-. mensajes.sh
+. entorno.sh
 
 OUT_TARGET_HOST=linux-x86
 SECURITYDIR=$ANDROID_BUILD_TOP/build/target/product/security

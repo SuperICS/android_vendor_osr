@@ -19,25 +19,8 @@
 TOPDIR=`pwd`
 OUT_SCRIPTDIRTARGET_HOST=linux-x86
 OUT_TARGET_HOST=linux-x86
-ROMDIR=$TOPDIR/../cache/roms/$DEVICE
-BUILDDIR=$ROMDIR/last_build
-RELEASEDIR=$ROMDIR/last_release
-PATCHDIR=$ROMDIR/last_patch
-PUBLICDIR=$ROMDIR/last_public
-CONFIGFILE=~/.SuperOSR.conf
 VENDOR=vendor/SuperTeam
 SECURITYDIR=$ANDROID_BUILD_TOP/build/target/product/security
-
-#Cargamos los valores personalizados
-[ -r $CONFIGFILE ] && . $CONFIGFILE
-
-#Buscamos valores personalizados para el build
-CORES=${CORES:-`cat /proc/cpuinfo | grep -c processor`}
-if [ -n "$USE_CCACHE" ] && [ "$USE_CCACHE" = "1" ]; then
-	export USE_CCACHE=1
-else
-	unset USE_CCACHE
-fi
 
 #Colores
 YELLOW="\033[1;33m" #el primer número es 1 (negrita); después el color

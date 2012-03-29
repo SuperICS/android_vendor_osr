@@ -22,7 +22,7 @@ CORES=$( cat /proc/cpuinfo | grep -c processor )
 
 CHANGE_FRAMEWORK=1
 
-. mensajes.sh
+. entorno.sh
 
 # Verificación de entorno de desarrollo operativo
 if [ -z "$OUT" -o ! -d "$OUT" ]; then
