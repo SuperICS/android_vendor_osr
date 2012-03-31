@@ -10,7 +10,7 @@ OPTICHARGER=$ANDROID_BUILD_TOP/$VENDOR/tools/opticharger
 OPTICACHE=$OUT/.opticharger
 [ -d ${OPTICACHE} ] || mkdir -p ${OPTICACHE}
 
-. mensajes.sh
+. entorno.sh
 
 A=$1
 

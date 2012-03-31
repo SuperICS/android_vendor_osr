@@ -18,10 +18,8 @@
 # Firma ficheros para instalar en el dispositivo. 
 #
 
-. entorno.sh
-
-OUT_TARGET_HOST=linux-x86
-SECURITYDIR=$ANDROID_BUILD_TOP/build/target/product/security
+SCRIPTDIR=`dirname $0`
+. $SCRIPTDIR/entorno.sh
 
 msgStatus "Firmando el fichero $1"
 	

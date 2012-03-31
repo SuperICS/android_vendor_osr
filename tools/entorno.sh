@@ -19,7 +19,7 @@
 TOPDIR=`pwd`
 OUT_SCRIPTDIRTARGET_HOST=linux-x86
 OUT_TARGET_HOST=linux-x86
-VENDOR=vendor/SuperTeam
+VENDOR=vendor/osr
 SECURITYDIR=$ANDROID_BUILD_TOP/build/target/product/security
 
 #Colores

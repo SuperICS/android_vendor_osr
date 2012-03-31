@@ -1,5 +1,5 @@
 #!/bin/bash
-. mensajes.sh
+. entorno.sh
 msgStatus "Personalizacion exclusiva"
 msgStatus " "
 rm -rf $OUT/repack.d/ota/system/app/BooksPhone.apk
