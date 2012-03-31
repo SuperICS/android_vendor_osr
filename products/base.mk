@@ -1,16 +1,27 @@
 #SuperOSR'squisher
-TARGET_CUSTOM_RELEASETOOL := ./vendor/SuperTeam/tools/squisher
+TARGET_CUSTOM_RELEASETOOL := ./vendor/osr/tools/squisher
+
+$(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
 #Skip test
 LIBCORE_SKIP_TESTS := true
+BLUEZ_SKIP_TESTS := true
+SKIA_SKIP_TESTS := true
 
-# for bugmailer
-ifneq ($(TARGET_BUILD_VARIANT),user)
-    PRODUCT_PACKAGES += send_bug
-    PRODUCT_COPY_FILES += \
-        system/extras/bugmailer/bugmailer.sh:system/bin/bugmailer.sh \
-        system/extras/bugmailer/send_bug:system/bin/send_bug
-endif
+PRODUCT_PACKAGES += \
+		Camera \
+		Superuser \
+		MusicFX \
+		AndroidTerm \
+		FileExplorer \
+		Notes \
+		ROMControl \
+		SoundRecorder2 \
+		Wallpapers
+
+PRODUCT_CODENAME := ST
+PRODUCT_VERSION_MAJOR := 0
+PRODUCT_VERSION_MINOR := 0
 
 PRODUCT_TAGS += dalvik.gc.type-precise
 
@@ -18,10 +29,16 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=30
+    ro.mod.version=SuperOSR \
+    ro.osr.version=SuperOSR-ST-$(TEAM_PRODUCT)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
+    ro.build.romversion=SuperOSR-ST-$(TEAM_PRODUCT)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
+    ro.rommanager.developerid=supermvl \
+    ro.sup.superteam 
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/base/data/etc/android.hardware.camera.autofocus.xml:system/etc/permissions/android.hardware.camera.autofocus.xml \
     frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
     frameworks/base/data/etc/android.hardware.wifi.direct.xml:system/etc/permissions/android.hardware.wifi.direct.xml \
