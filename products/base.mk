@@ -19,7 +19,8 @@ PRODUCT_PACKAGES += \
 		SoundRecorder2 \
 		Wallpapers
 
-PRODUCT_CODENAME := ST
+TEAM_PRODUCT := SuperOSR
+TEAM_NAME := ST
 PRODUCT_VERSION_MAJOR := 0
 PRODUCT_VERSION_MINOR := 0
 
@@ -29,9 +30,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=30
-    ro.mod.version=SuperOSR \
-    ro.osr.version=SuperOSR-ST-$(TEAM_PRODUCT)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
-    ro.build.romversion=SuperOSR-ST-$(TEAM_PRODUCT)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
+    ro.mod.version=$(TEAM_PRODUCT) \
+    ro.osr.version=$(TEAM_PRODUCT)-$(TEAM_NAME)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
+    ro.build.romversion=$(TEAM_PRODUCT)-$(TEAM_NAME)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
     ro.rommanager.developerid=supermvl \
     ro.sup.superteam 
 
