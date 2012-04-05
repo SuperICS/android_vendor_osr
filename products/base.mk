@@ -17,23 +17,76 @@ PRODUCT_PACKAGES += \
 		Notes \
 		ROMControl \
 		SoundRecorder2 \
-		Wallpapers
+		Wallpapers \
+    	VideoEditor \
+	    VoiceDialer \
+    	Basic \
+    	Launcher2 \
+    	MusicVisualization \
+    	LatinIME \
+    	SpareParts \
+    	su \
+    	DSPManager \
+    	libcyanogen-dsp \
+	    audio_effects.conf
 
 TEAM_PRODUCT := SuperOSR
 TEAM_NAME := ST
-PRODUCT_VERSION_MAJOR := 0
-PRODUCT_VERSION_MINOR := 0
+PRODUCT_VERSION_MAJOR = 1
+PRODUCT_VERSION_MINOR = 4
 
 PRODUCT_TAGS += dalvik.gc.type-precise
+
+PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
+
+# init.d support
+PRODUCT_COPY_FILES += \
+    vendor/osr/prebuilt/common/etc/init.d/00banner:system/etc/init.d/00banner \
+    vendor/osr/prebuilt/common/bin/sysinit:system/bin/sysinit
+
+# Compcache/Zram support
+PRODUCT_COPY_FILES += \
+    vendor/osr/prebuilt/common/etc/init.local.rc:system/etc/init.local.rc \
+    vendor/osr/prebuilt/common/bin/compcache:system/bin/compcache \
+    vendor/osr/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache
+
+PRODUCT_COPY_FILES +=  \
+    vendor/osr/proprietary/Term.apk:system/app/Term.apk \
+    vendor/osr/proprietary/lib/armeabi/libjackpal-androidterm3.so:system/lib/libjackpal-androidterm3.so 
+
+# Bring in camera effects & videos
+#$(call inherit-product, frameworks/base/data/videos/VideoPackage2.mk)
+PRODUCT_COPY_FILES +=  \
+    vendor/osr/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
+    vendor/osr/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd
+
+# Enable SIP+VoIP on all targets
+PRODUCT_COPY_FILES += \
+    frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
+
+# Don't export PS1 in /system/etc/mkshrc.
+PRODUCT_COPY_FILES += \
+    vendor/osr/prebuilt/common/etc/mkshrc:system/etc/mkshrc
+
+PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/dictionaries
+PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=30
     ro.mod.version=$(TEAM_PRODUCT) \
-    ro.osr.version=$(TEAM_PRODUCT)-$(TEAM_NAME)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
-    ro.build.romversion=$(TEAM_PRODUCT)-$(TEAM_NAME)-$(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR).$(PRODUCT_VERSION_MAINTENANCE) \
+    ro.osr.version=$(PRODUCT_ROM_FILE) \
+    ro.build.romversion=$(PRODUCT_ROM_FILE) \
     ro.rommanager.developerid=supermvl \
+    keyguard.no_require_sim=true \
+    ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
+    ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
+    ro.com.google.clientidbase=android-google \
+    ro.com.android.wifi-watchlist=GoogleGuest \
+    ro.setupwizard.enterprise_mode=1 \
+    ro.com.android.dateformat=MM-dd-yyyy \
+    ro.com.android.dataroaming=false \
     ro.sup.superteam 
 
 # These are the hardware-specific features

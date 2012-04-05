@@ -1,8 +1,18 @@
-PRODUCT_PACKAGES := \
+# Specific configuration for Asia builds
+PRODUCT_LOCALES := \
+    en_US \
+    zh_CN \
+    ja_JP \
+    ko_KR \
+    ru_RU
+
+# Asian IME stuff
+PRODUCT_PACKAGES := $(PRODUCT_PACKAGES) \
     OpenWnn \
     PinyinIME \
-    libWnnEngDic \
     libWnnJpnDic \
-    libwnndict
-    
-PRODUCT_LOCALES := ja_JP zh_TW zh_CN ru_RU ko_KR
+    libwnndict \
+    libjni_pinyinime
+
+PRODUCT_NOLATIN_IME := true
+PRODUCT_SUBDEVICE := $(PRODUCT_DEVICE)_cn
