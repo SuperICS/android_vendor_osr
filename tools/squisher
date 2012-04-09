@@ -43,7 +43,7 @@ fi
 
 # Valores por defecto
 KERNELMOD=0
-ALIAS=${TARGET_PRODUCT:5}
+ALIAS=${TARGET_PRODUCT:4}
 
 #Valores específicos
 case "$ALIAS" in
