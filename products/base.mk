@@ -39,36 +39,10 @@ PRODUCT_TAGS += dalvik.gc.type-precise
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
-# init.d support
-PRODUCT_COPY_FILES += \
-    vendor/osr/prebuilt/common/etc/init.d/00banner:system/etc/init.d/00banner \
-    vendor/osr/prebuilt/common/bin/sysinit:system/bin/sysinit
-
-# Compcache/Zram support
-PRODUCT_COPY_FILES += \
-    vendor/osr/prebuilt/common/etc/init.local.rc:system/etc/init.local.rc \
-    vendor/osr/prebuilt/common/bin/compcache:system/bin/compcache \
-    vendor/osr/prebuilt/common/bin/handle_compcache:system/bin/handle_compcache
-
-PRODUCT_COPY_FILES +=  \
-    vendor/osr/proprietary/Term.apk:system/app/Term.apk \
-    vendor/osr/proprietary/lib/armeabi/libjackpal-androidterm3.so:system/lib/libjackpal-androidterm3.so 
-
-# Bring in camera effects & videos
-#$(call inherit-product, frameworks/base/data/videos/VideoPackage2.mk)
-PRODUCT_COPY_FILES +=  \
-    vendor/osr/prebuilt/common/media/LMprec_508.emd:system/media/LMprec_508.emd \
-    vendor/osr/prebuilt/common/media/PFFprec_600.emd:system/media/PFFprec_600.emd
-
 # Enable SIP+VoIP on all targets
 PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
 
-# Don't export PS1 in /system/etc/mkshrc.
-PRODUCT_COPY_FILES += \
-    vendor/osr/prebuilt/common/etc/mkshrc:system/etc/mkshrc
-
-PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/dictionaries
 PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
 
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -101,3 +75,5 @@ PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml \
     frameworks/base/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
+
+$(call inherit-product, vendor/osr/products/minimal_gapps.mk)
