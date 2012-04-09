@@ -1,0 +1,8 @@
+#!/system/bin/sh
+#
+#
+Print="log -p i -t SuperTeam"
+
+$Print "+++ Gracias a todos por elegir esta rom (`getprop ro.mod.version`-`getprop ro.build.version.release`)"
+$Print "espero que la disfruteis, y agradecimientos a todo el foro de Movilzona"
+$Print "Iniciando.....";
