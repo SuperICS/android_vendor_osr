@@ -21,50 +21,38 @@ updater=$REPACKOTA/META-INF/com/google/android/updater-script
 
 CORES=$( cat /proc/cpuinfo | grep -c processor )
 
-CHANGE_FRAMEWORK=1
-
 . entorno.sh
 
 # Verificación de entorno de desarrollo operativo
 if [ -z "$OUT" -o ! -d "$OUT" ]; then
-  msgErr "$0 solo funciona con un entorno completo de desarrollo. $OUT debe existir."
-  exit 1
+	msgErr "$0 solo funciona con un entorno completo de desarrollo. $OUT debe existir."
+	exit 1
 fi
 
 # Se verifica que existe el fichero inicial.
 if [ ! -f "$OTAPACKAGE" ]; then
-  msgErr "$OTAPACKAGE no existe!"
-  exit 1
+	msgErr "$OTAPACKAGE no existe!"
+	exit 1
 fi
 
 # Configuración del dispositivo
 # ALIAS: Nombre corto del dispositivo. Se recomienda no tocar este valor, se toma a partir del nombre del product.
 # KERNELMOD: 1 indica que el núcleo tiene módulos sin comprimir. 0 valor por defecto
+# CHANGE_FRAMEWORK: 0 indica que no se optimiza el paquete framework-res
 
 # Valores por defecto
 KERNELMOD=0
 ALIAS=${TARGET_PRODUCT:4}
+CHANGE_FRAMEWORK=1
 
 #Valores específicos
 case "$ALIAS" in
-    ace)
-        KERNELMOD=1
-        ;;
-    anzu)
-        KERNELMOD=1
-        ;;
-    galaxysmtd) 
-	GOOGLEFACE=0
-	;;
-    maguro) 
-	GOOGLEFACE=0
-	;;
-    pyramid) 
-	GOOGLEFACE=0
-	;;
-    sirius)
-	GOOGLEFACE=0
-	;;
+	ace)
+		KERNELMOD=1
+		;;
+	anzu)
+		KERNELMOD=1
+		;;
 esac
 
 # Elimina cualquier directorio de un trabajo antiguo
@@ -76,29 +64,29 @@ mkdir -p $REPACK
 # Descomprime el otapackage y ejecuta opticharge en todos los apks
 mkdir $REPACKOTA
 
-    cd $REPACKOTA
-    msgStatus "Desempaquetando $OTAPACKAGE..."
-    unzip $QUIET $OTAPACKAGE
+cd $REPACKOTA
+msgStatus "Desempaquetando $OTAPACKAGE..."
+unzip $QUIET $OTAPACKAGE
   
 # Copiado de archivos comunes
-    cp -rf $ANDROID_BUILD_TOP/$MODS/common/* $REPACKOTA/
+cp -rf $ANDROID_BUILD_TOP/$MODS/common/* $REPACKOTA/
 
 if [ $CHANGE_FRAMEWORK -eq 1 ]
 then
 # Extraemos el framework para modificarlo
-    mkdir $REPACKOTA/system/framework/opticharge
-    cd $REPACKOTA/system/framework/opticharge
-    msgStatus "Desempaquetando framework-res..."
-    unzip -q ../framework-res.apk
+	mkdir $REPACKOTA/system/framework/opticharge
+	cd $REPACKOTA/system/framework/opticharge
+	msgStatus "Desempaquetando framework-res..."
+	unzip -q ../framework-res.apk
   
 # Comprimimos sin optimizar pues lo haremos luego 
-    msgStatus "Comprimiendo framework..."
-    zip -rq framework-res.apk *
-    mv -f framework-res.apk ../framework-res.apk
-    cd ..
-    rm -rf opticharge
+	msgStatus "Comprimiendo framework-res..."
+	zip -rq framework-res.apk *
+	mv -f framework-res.apk ../framework-res.apk
+	cd ..
+	rm -rf opticharge
 else
-    msgStatus "No se haran cambios del framework-res"
+	msgStatus "No se haran cambios del framework-res"
 fi
   
 cd $REPACKOTA/system/framework
@@ -141,15 +129,14 @@ rm -rf $REPACKOTA/system/lib/modules/*/kernel/drivers/net
 
 # Se eliminan apks conflictivas con gapps
 rm -rf $REPACKOTA/system/app/Provision.apk
-#rm -rf $REPACKOTA/system/app/QuickSearchBox.apk
 
 # No se necesita recovery (en caso de existir)
 rm -rf $REPACKOTA/recovery
 
 # Strip modulos
 if [ "$KERNELMOD" -eq 1 ];  then
-    msgStatus "Comprimiendo módulos"
-    find $REPACKOTA/system/lib/modules -name "*.ko" -print0 | xargs -0 arm-eabi-strip --strip-unneeded
+	msgStatus "Comprimiendo módulos"
+	find $REPACKOTA/system/lib/modules -name "*.ko" -print0 | xargs -0 arm-eabi-strip --strip-unneeded
 fi
 
 cd $REPACKOTA
@@ -165,8 +152,8 @@ fi
 
 firmar.sh $REPACK/update.zip $ROMPACKAGE
 if [ "$?" -ne 0 ]; then
-    msgErr "Error al obtener el fichero firmado $ROMPACKAGE"
-    exit 1
+	msgErr "Error al obtener el fichero firmado $ROMPACKAGE"
+	exit 1
 fi
 
 exit 0
