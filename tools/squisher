@@ -40,34 +40,30 @@ fi
 # Configuración del dispositivo
 # ALIAS: Nombre corto del dispositivo. Se recomienda no tocar este valor, se toma a partir del nombre del product.
 # KERNELMOD: 1 indica que el núcleo tiene módulos sin comprimir. 0 valor por defecto
-# SETUP: 1 Indica que no queremos Setupwizard en el arranque.
 
 # Valores por defecto
 KERNELMOD=0
-SETUP=1
 ALIAS=${TARGET_PRODUCT:4}
 
 #Valores específicos
 case "$ALIAS" in
     ace)
-	KERNELMOD=1
-	SETUP=0
+        KERNELMOD=1
         ;;
     anzu)
-	KERNELMOD=1
-	SETUP=0
+        KERNELMOD=1
         ;;
     galaxysmtd) 
-	SETUP=0
+	GOOGLEFACE=0
 	;;
     maguro) 
-	SETUP=0
+	GOOGLEFACE=0
 	;;
     pyramid) 
-	SETUP=0
+	GOOGLEFACE=0
 	;;
     sirius)
-	SETUP=0
+	GOOGLEFACE=0
 	;;
 esac
 
@@ -107,9 +103,6 @@ fi
   
 cd $REPACKOTA/system/framework
 
-# Copiado de archivos especificos del dispositivo
-    cp -r $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/* $REPACKOTA/
-
 # Ejecuta si existe personalizaciones específicas del dispositivo.
 if [ -f $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh ]; then
    	$ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh $REPACKOTA
@@ -135,11 +128,6 @@ sed -i \
   -e '/ro\.build\.type/s/eng/user/' \
   -e '/ro\.build\.date\.utc/s/.*/ro.build.date.utc=0/' \
   $REPACKOTA/system/build.prop
-
-# Decidimos si queremos SetupWizard al inicio o no
-if [ "$SETUP" -eq 1 ]; then
-sed -i 's/ro.setupwizard.mode=OPTIONAL/ro.setupwizard.mode=DISABLED/g' $REPACKOTA/system/build.prop
-fi
 
 # Eliminar binarios innecesarios
 cd $REPACKOTA/system/bin
