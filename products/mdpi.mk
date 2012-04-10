@@ -1,7 +1,7 @@
 # of course
 PRODUCT_LOCALES := mdpi
 
-# Specific hdpi files
+# Specific mdpi files
 PRODUCT_COPY_FILES += \
 	vendor/osr/prebuilt/bootanimation.mdpi.zip:system/media/bootanimation.zip
 
