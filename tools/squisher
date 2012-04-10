@@ -103,6 +103,9 @@ fi
   
 cd $REPACKOTA/system/framework
 
+# Copiado de archivos especificos del dispositivo
+cp -r $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/* $REPACKOTA/
+
 # Ejecuta si existe personalizaciones específicas del dispositivo.
 if [ -f $ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh ]; then
    	$ANDROID_BUILD_TOP/$MODS/terminales/$ALIAS/personalizar.sh $REPACKOTA
