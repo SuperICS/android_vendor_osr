@@ -3,6 +3,14 @@ TARGET_CUSTOM_RELEASETOOL := ./vendor/osr/tools/squisher
 
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
+$(call inherit-product, vendor/osr/products/base_audio.mk)
+
+# Default ringtone
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.ringtone=Theway.mp3 \
+    ro.config.notification_sound=Ping.ogg \
+    ro.config.alarm_alert=Alarm2.ogg
+
 #Skip test
 LIBCORE_SKIP_TESTS := true
 BLUEZ_SKIP_TESTS := true
