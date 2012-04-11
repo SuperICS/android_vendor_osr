@@ -34,8 +34,6 @@ PRODUCT_PACKAGES += \
     	LatinIME \
     	SpareParts \
     	su \
-    	DSPManager \
-    	libcyanogen-dsp \
 	    audio_effects.conf
 
 TEAM_PRODUCT := SuperOSR
@@ -56,7 +54,7 @@ PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
-    wifi.supplicant_scan_interval=180 \
+    wifi.supplicant_scan_interval=60 \
     ro.mod.version=$(TEAM_PRODUCT) \
     ro.osr.version=$(PRODUCT_ROM_FILE) \
     ro.build.romversion=$(PRODUCT_ROM_FILE) \
