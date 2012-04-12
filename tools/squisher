@@ -129,6 +129,7 @@ rm -rf $REPACKOTA/system/lib/modules/*/kernel/drivers/net
 
 # Se eliminan apks conflictivas con gapps
 rm -rf $REPACKOTA/system/app/Provision.apk
+rm -rf $REPACKOTA/system/app/Provision.odex
 
 # No se necesita recovery (en caso de existir)
 rm -rf $REPACKOTA/recovery

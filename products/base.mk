@@ -3,6 +3,14 @@ TARGET_CUSTOM_RELEASETOOL := ./vendor/osr/tools/squisher
 
 $(call inherit-product, device/common/gps/gps_eu_supl.mk)
 
+$(call inherit-product, vendor/osr/products/base_audio.mk)
+
+# Default ringtone
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.config.ringtone=Theway.mp3 \
+    ro.config.notification_sound=Ping.ogg \
+    ro.config.alarm_alert=Alarm2.ogg
+
 #Skip test
 LIBCORE_SKIP_TESTS := true
 BLUEZ_SKIP_TESTS := true
@@ -26,8 +34,6 @@ PRODUCT_PACKAGES += \
     	LatinIME \
     	SpareParts \
     	su \
-    	DSPManager \
-    	libcyanogen-dsp \
 	    audio_effects.conf
 
 TEAM_PRODUCT := SuperOSR
@@ -48,8 +54,7 @@ PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
 
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=131072 \
-    wifi.interface=wlan0 \
-    wifi.supplicant_scan_interval=30 \
+    wifi.supplicant_scan_interval=60 \
     ro.mod.version=$(TEAM_PRODUCT) \
     ro.osr.version=$(PRODUCT_ROM_FILE) \
     ro.build.romversion=$(PRODUCT_ROM_FILE) \
