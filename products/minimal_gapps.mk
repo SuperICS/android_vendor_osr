@@ -20,11 +20,11 @@ PRODUCT_COPY_FILES += \
     vendor/osr/prebuilt/gapps/app/Music.apk:system/app/Music.apk \
     vendor/osr/prebuilt/gapps/app/NetworkLocation.apk:system/app/NetworkLocation.apk \
     vendor/osr/prebuilt/gapps/app/OneTimeInitializer.apk:system/app/OneTimeInitializer.apk \
+    vendor/osr/prebuilt/gapps/app/Phonesky.apk:system/app/Phonesky.apk \
     vendor/osr/prebuilt/gapps/app/SetupWizard.apk:system/app/SetupWizard.apk \
     vendor/osr/prebuilt/gapps/app/Street.apk:system/app/Street.apk \
     vendor/osr/prebuilt/gapps/app/Talk.apk:system/app/Talk.apk \
     vendor/osr/prebuilt/gapps/app/YouTube.apk:system/app/YouTube.apk \
-    vendor/osr/prebuilt/gapps/app/Vending.apk:system/app/Vending.apk \
     vendor/osr/prebuilt/gapps/app/VoiceSearch.apk:system/app/VoiceSearch.apk \
     vendor/osr/prebuilt/gapps/etc/permissions/com.google.android.maps.xml:system/etc/permissions/com.google.android.maps.xml \
     vendor/osr/prebuilt/gapps/etc/permissions/features.xml:system/etc/permissions/features.xml \

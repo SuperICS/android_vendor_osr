@@ -4,6 +4,7 @@ PRODUCT_COPY_FILES +=  \
     vendor/osr/prebuilt/facelook/lib/libfacelock_jni.so:system/lib/libfacelock_jni.so \
     vendor/osr/prebuilt/facelook/lib/libfilterpack_facedetect.so:system/lib/libfilterpack_facedetect.so \
     vendor/osr/prebuilt/facelook/lib/libflint_engine_jni_api.so:system/lib/libflint_engine_jni_api.so \
+    vendor/osr/prebuilt/facelook/lib/libfrsdk.so:system/lib/libfrsdk.so \
     vendor/osr/prebuilt/facelook/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.3/left_eye-y0-yi45-p0-pi45-r0-ri20.2d_n2/full_model.bin:system/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.3/left_eye-y0-yi45-p0-pi45-r0-ri20.2d_n2/full_model.bin \
     vendor/osr/prebuilt/facelook/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.3/left_eye-y0-yi45-p0-pi45-rn7-ri20.2d_n2/full_model.bin:system/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.3/left_eye-y0-yi45-p0-pi45-rn7-ri20.2d_n2/full_model.bin \
     vendor/osr/prebuilt/facelook/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.3/left_eye-y0-yi45-p0-pi45-rp7-ri20.2d_n2/full_model.bin:system/vendor/pittpatt/models/detection/multi_pose_face_landmark_detectors.3/left_eye-y0-yi45-p0-pi45-rp7-ri20.2d_n2/full_model.bin \
