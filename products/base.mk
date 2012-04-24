@@ -19,22 +19,21 @@ SKIA_SKIP_TESTS := true
 PRODUCT_PACKAGES += \
 		Camera \
 		Superuser \
-		MusicFX \
 		AndroidTerm \
 		FileExplorer \
 		Notes \
 		ROMControl \
 		SoundRecorder2 \
 		Wallpapers \
-    	VideoEditor \
-	    VoiceDialer \
-    	Basic \
-    	Launcher2 \
-    	MusicVisualization \
-    	LatinIME \
-    	SpareParts \
-    	su \
-	    audio_effects.conf
+    		VideoEditor \
+	    	VoiceDialer \
+    		Basic \
+    		Launcher2 \
+		MusicFX \
+    		MusicVisualization \
+    		LatinIME \
+    		SpareParts \
+    		su
 
 TEAM_PRODUCT := SuperOSR
 TEAM_NAME := ST
