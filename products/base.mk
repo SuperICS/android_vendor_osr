@@ -9,7 +9,7 @@ $(call inherit-product, vendor/osr/products/base_audio.mk)
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.ringtone=Theway.mp3 \
     ro.config.notification_sound=Ping.ogg \
-    ro.config.alarm_alert=Alarm2.ogg
+    ro.config.alarm_alert=Scandium.ogg
 
 #Skip test
 LIBCORE_SKIP_TESTS := true
