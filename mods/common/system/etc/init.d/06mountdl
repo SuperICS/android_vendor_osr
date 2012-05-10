@@ -3,11 +3,11 @@
 # bind mount /data/local/download to /cache/download if cache
 # partition is too small
 #
+#No usado por ahora
+#CACHESIZE=$(df /cache | tail -n1 | tr -s ' ' | cut -d ' ' -f2)
+#if [ ${CACHESIZE:0:3} -lt 20000 ]
+#then
+#  mount -o bind /data/local/download /cache/download
+#fi
 
-CACHESIZE=$(df -k /cache | tail -n1 | tr -s ' ' | cut -d ' ' -f2)
-if [ $CACHESIZE -lt 20000 ]
-then
-  mount -o bind /data/local/download /cache/download
-fi
-
-exit 0
+#exit 0

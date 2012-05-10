@@ -14,12 +14,12 @@ done
 
 echo 2048 > /sys/devices/virtual/bdi/179:0/read_ahead_kb;
 echo 512 > /sys/devices/virtual/bdi/31:0/read_ahead_kb;
-echo 512 > /sys/devices/virtual/bdi/31:1/read_ahead_kb;
-echo 512 > /sys/devices/virtual/bdi/31:2/read_ahead_kb;
-echo 512 > /sys/devices/virtual/bdi/31:3/read_ahead_kb;
-echo 512 > /sys/devices/virtual/bdi/31:4/read_ahead_kb;
-echo 512 > /sys/devices/virtual/bdi/31:5/read_ahead_kb;
-echo 512 > /sys/devices/virtual/bdi/31:5/read_ahead_kb;
+#echo 512 > /sys/devices/virtual/bdi/31:1/read_ahead_kb;
+#echo 512 > /sys/devices/virtual/bdi/31:2/read_ahead_kb;
+#echo 512 > /sys/devices/virtual/bdi/31:3/read_ahead_kb;
+#echo 512 > /sys/devices/virtual/bdi/31:4/read_ahead_kb;
+#echo 512 > /sys/devices/virtual/bdi/31:5/read_ahead_kb;
+#echo 512 > /sys/devices/virtual/bdi/31:5/read_ahead_kb;
 
 for i in \
 `find /data -iname "*.db"`
