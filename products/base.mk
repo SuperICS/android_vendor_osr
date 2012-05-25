@@ -17,6 +17,7 @@ BLUEZ_SKIP_TESTS := true
 SKIA_SKIP_TESTS := true
 
 PRODUCT_PACKAGES += \
+		Apollo \
 		Camera \
 		Superuser \
 		AndroidTerm \

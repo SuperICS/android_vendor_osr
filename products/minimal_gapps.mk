@@ -17,7 +17,6 @@ PRODUCT_COPY_FILES += \
     vendor/osr/prebuilt/gapps/app/Maps.apk:system/app/Maps.apk \
     vendor/osr/prebuilt/gapps/app/MarketUpdater.apk:system/app/MarketUpdater.apk \
     vendor/osr/prebuilt/gapps/app/MediaUploader.apk:system/app/MediaUploader.apk \
-    vendor/osr/prebuilt/gapps/app/Music.apk:system/app/Music.apk \
     vendor/osr/prebuilt/gapps/app/NetworkLocation.apk:system/app/NetworkLocation.apk \
     vendor/osr/prebuilt/gapps/app/OneTimeInitializer.apk:system/app/OneTimeInitializer.apk \
     vendor/osr/prebuilt/gapps/app/Phonesky.apk:system/app/Phonesky.apk \
@@ -36,3 +35,5 @@ PRODUCT_COPY_FILES += \
     vendor/osr/prebuilt/gapps/lib/libvideochat_jni.so:system/lib/libvideochat_jni.so \
     vendor/osr/prebuilt/gapps/lib/libvideochat_stabilize.so:system/lib/libvideochat_stabilize.so \
     vendor/osr/prebuilt/gapps/lib/libvoicesearch.so:system/lib/libvoicesearch.so
+
+#    vendor/osr/prebuilt/gapps/app/Music.apk:system/app/Music.apk \
