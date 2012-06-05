@@ -33,6 +33,7 @@ PRODUCT_PACKAGES += \
 		MusicFX \
     		MusicVisualization \
     		LatinIME \
+		Otarootkeeper\
     		SpareParts \
     		su
 
