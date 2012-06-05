@@ -14,6 +14,7 @@ PRODUCT_COPY_FILES += \
     vendor/osr/prebuilt/gapps/app/GoogleQuickSearchBox.apk:system/app/GoogleQuickSearchBox.apk \
     vendor/osr/prebuilt/gapps/app/GoogleServicesFramework.apk:system/app/GoogleServicesFramework.apk \
     vendor/osr/prebuilt/gapps/app/GoogleTTS.apk:system/app/GoogleTTS.apk \
+    vendor/osr/prebuilt/gapps/app/GoogleVideos.apk:system/app/GoogleVideos.apk \
     vendor/osr/prebuilt/gapps/app/Maps.apk:system/app/Maps.apk \
     vendor/osr/prebuilt/gapps/app/MarketUpdater.apk:system/app/MarketUpdater.apk \
     vendor/osr/prebuilt/gapps/app/MediaUploader.apk:system/app/MediaUploader.apk \
