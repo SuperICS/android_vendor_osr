@@ -68,7 +68,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.setupwizard.enterprise_mode=1 \
     ro.com.android.dateformat=MM-dd-yyyy \
     ro.com.android.dataroaming=false \
-    ro.sup.superteam 
+    ro.sup.superteam \
+    ro.config.ringtone=Terminated.ogg \
+    ro.config.notification_sound=Vega.ogg
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
