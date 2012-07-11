@@ -70,7 +70,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.android.dataroaming=false \
     ro.sup.superteam \
     ro.config.ringtone=Terminated.ogg \
-    ro.config.notification_sound=Vega.ogg
+    ro.config.notification_sound=Howl.ogg
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
