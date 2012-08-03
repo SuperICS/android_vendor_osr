@@ -1,0 +1,18 @@
+#!/system/bin/sh
+#
+sleep 50
+if [ ! -d /mnt/sdcard/External_SD ]  
+then
+mkdir /mnt/sdcard/External_SD
+touch /mnt/sdcard/.sdflag
+echo "Link to internal SD-CARD and created flag"
+    busybox mount -o bind /mnt/extSdCard /mnt/sdcard/External_SD
+fi
+
+sleep 5
+
+if [ -f /mnt/sdcard/.sdflag ]
+then
+echo "Link to internal SD-CARD"
+    busybox mount -o bind /mnt/extSdCard /mnt/sdcard/External_SD
+fi
