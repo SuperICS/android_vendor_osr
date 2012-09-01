@@ -26,16 +26,16 @@ PRODUCT_PACKAGES += \
 		ROMControl \
 		SoundRecorder2 \
 		Wallpapers \
-    		VideoEditor \
-	    	VoiceDialer \
-    		Basic \
-    		Launcher2 \
+		VideoEditor \
+		VoiceDialer \
+		Basic \
+		Launcher2 \
 		MusicFX \
-    		MusicVisualization \
-    		LatinIME \
+		MusicVisualization \
+		LatinIME \
 		Otarootkeeper \
-    		SpareParts \
-    		su
+		SpareParts \
+		su
 
 TEAM_PRODUCT := SuperOSR
 TEAM_NAME := ST
@@ -46,10 +46,6 @@ PRODUCT_VERSION_MINOR := 0
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-
-# Enable SIP+VoIP on all targets
-PRODUCT_COPY_FILES += \
-    frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
 
 PRODUCT_PACKAGE_OVERLAYS += vendor/osr/overlay/common
 
